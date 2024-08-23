@@ -22,7 +22,7 @@ public class UsuarioDAO extends DAO {
 		boolean status = false;
 		try {  
 
-			//verificacao para o numero do codigo na hora de inserir
+			//verificacao para o numero do codigo na hora de inserir um novo usuario
 			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			String sqlCheck = "SELECT MAX(codigo) AS max_codigo FROM usuario";
 			ResultSet rs = st.executeQuery(sqlCheck);
@@ -155,7 +155,7 @@ public class UsuarioDAO extends DAO {
 
 		try {
 			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			String sql = "SELECT * FROM usuario WHERE usuario.idade > 18";
+			String sql = "SELECT * FROM usuario WHERE usuario.idade >= 18";
 			System.out.println(sql);
 			ResultSet rs = st.executeQuery(sql);
 			while(rs.next()) {

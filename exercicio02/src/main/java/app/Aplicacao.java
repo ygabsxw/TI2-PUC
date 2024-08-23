@@ -34,13 +34,13 @@ public class Aplicacao {
 		}
 
 		System.out.println("\n\n==== Mostrar usuários ordenados por serem maiores de idade === ");
-		usuarios = usuarioDAO.getOrderByIdade();
+		usuarios = usuarioDAO.getMaiores18();
 		for (Usuario u: usuarios) {
 			System.out.println(u.toString());
 		}
 
 		System.out.println("\n\n==== Mostrar usuários ordenados por serem menores de idade === ");
-		usuarios = usuarioDAO.getOrderByIdade();
+		usuarios = usuarioDAO.getMenores18();
 		for (Usuario u: usuarios) {
 			System.out.println(u.toString());
 		}
