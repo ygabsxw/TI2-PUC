@@ -29,6 +29,7 @@ public class UsuarioDAO extends DAO {
 			if (rs.next()) {
 				int maxCodigo = rs.getInt("max_codigo");
 				if (usuario.getCodigo() <= maxCodigo) {
+					System.out.println("O código informado já existe. Será utilizado o código " + (maxCodigo + 1) + " para o novo usuário.");
 					usuario.setCodigo(maxCodigo + 1);
 				}
 			}
