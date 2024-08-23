@@ -25,13 +25,14 @@ CREATE TABLE public.usuario (
     login text,
     senha text,
     sexo character(1)
+    idade integer
 );
 
 
 ALTER TABLE public.usuario OWNER TO postgres;
 
 --
--- Name: usuario usuario_pkey; Type: CONSTRAINT; Schema: public; Owner: ti2cc
+-- Name: usuario usuario_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.usuario

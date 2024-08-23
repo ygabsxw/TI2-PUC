@@ -17,21 +17,34 @@ public class UsuarioDAO extends DAO {
 		close();
 	}
 	
+	
 	public boolean insert(Usuario usuario) {
-	 	boolean status = false;
-	 	try {  
-	 		Statement st = conexao.createStatement();
-	 		String sql = "INSERT INTO usuario (codigo, login, senha, sexo) "
-	 			       + "VALUES ("+usuario.getCodigo() + ", '" + usuario.getLogin() + "', '"  
-	 			       + usuario.getSenha() + "', '" + usuario.getSexo() + "');";
-	 		System.out.println(sql);
-	 		st.executeUpdate(sql);
-	 		st.close();
-	 		status = true;
-	 	} catch (SQLException u) {  
+		boolean status = false;
+		try {  
+
+			//verificacao para o numero do codigo na hora de inserir
+			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			String sqlCheck = "SELECT MAX(codigo) AS max_codigo FROM usuario";
+			ResultSet rs = st.executeQuery(sqlCheck);
+			if (rs.next()) {
+				int maxCodigo = rs.getInt("max_codigo");
+				if (usuario.getCodigo() <= maxCodigo) {
+					usuario.setCodigo(maxCodigo + 1);
+				}
+			}
+
+
+			String sql = "INSERT INTO usuario (codigo, login, senha, sexo, idade) "
+				       + "VALUES ("+usuario.getCodigo()+ ", '" + usuario.getLogin() + "', '"  
+				       + usuario.getSenha() + "', '" + usuario.getSexo() + "', " + usuario.getIdade() + ");";
+			System.out.println(sql);
+			st.executeUpdate(sql);
+			st.close();
+			status = true;
+		} catch (SQLException u) {  
 			throw new RuntimeException(u);
-	 	}
-	 	return status;
+		}
+		return status;
 	}
 
 	
@@ -40,11 +53,11 @@ public class UsuarioDAO extends DAO {
 		
 		try {
 			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			String sql = "SELECT * FROM produto WHERE id=" + codigo;
+			String sql = "SELECT * FROM usuario WHERE id=" + codigo;
 			System.out.println(sql);
 			ResultSet rs = st.executeQuery(sql);	
 	        if(rs.next()){            
-	        	 usuario = new Usuario(rs.getInt("codigo"), rs.getString("login"), rs.getString("senha"), rs.getString("sexo").charAt(0));
+	        	 usuario = new Usuario(rs.getInt("codigo"), rs.getString("login"), rs.getString("senha"), rs.getString("sexo").charAt(0), rs.getInt("idade"));
 	        }
 	        st.close();
 		} catch (Exception e) {
@@ -72,6 +85,10 @@ public class UsuarioDAO extends DAO {
 	public List<Usuario> getOrderBySexo() {
 		return get("sexo");		
 	}
+
+	public List<Usuario> getOrderByIdade() {
+		return get("idade");		
+	}
 	
 	
 	private List<Usuario> get(String orderBy) {	
@@ -84,7 +101,7 @@ public class UsuarioDAO extends DAO {
 			System.out.println(sql);
 			ResultSet rs = st.executeQuery(sql);	           
 	        while(rs.next()) {	            	
-	        	Usuario u = new Usuario(rs.getInt("codigo"), rs.getString("login"), rs.getString("senha"), rs.getString("sexo").charAt(0));
+	        	Usuario u = new Usuario(rs.getInt("codigo"), rs.getString("login"), rs.getString("senha"), rs.getString("sexo").charAt(0), rs.getInt("idade"));
 	            usuarios.add(u);
 	        }
 	        st.close();
@@ -104,7 +121,7 @@ public class UsuarioDAO extends DAO {
 			System.out.println(sql);
 			ResultSet rs = st.executeQuery(sql);	           
 	        while(rs.next()) {	            	
-	        	Usuario u = new Usuario(rs.getInt("codigo"), rs.getString("login"), rs.getString("senha"), rs.getString("sexo").charAt(0));
+	        	Usuario u = new Usuario(rs.getInt("codigo"), rs.getString("login"), rs.getString("senha"), rs.getString("sexo").charAt(0), rs.getInt("idade"));
 	            usuarios.add(u);
 	        }
 	        st.close();
@@ -113,14 +130,70 @@ public class UsuarioDAO extends DAO {
 		}
 		return usuarios;
 	}
-	
+
+	public List<Usuario> getSexoFeminino() {
+		List<Usuario> usuarios = new ArrayList<Usuario>();
+		
+		try {
+			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+			String sql = "SELECT * FROM usuario WHERE usuario.sexo LIKE 'F'";
+			System.out.println(sql);
+			ResultSet rs = st.executeQuery(sql);	           
+	        while(rs.next()) {	            	
+	        	Usuario u = new Usuario(rs.getInt("codigo"), rs.getString("login"), rs.getString("senha"), rs.getString("sexo").charAt(0), rs.getInt("idade"));
+	            usuarios.add(u);
+	        }
+	        st.close();
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
+		return usuarios;
+	}
+
+	public List<Usuario> getMaiores18() {
+		List<Usuario> usuarios = new ArrayList<Usuario>();
+
+		try {
+			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+			String sql = "SELECT * FROM usuario WHERE usuario.idade > 18";
+			System.out.println(sql);
+			ResultSet rs = st.executeQuery(sql);
+			while(rs.next()) {
+				Usuario u = new Usuario(rs.getInt("codigo"), rs.getString("login"), rs.getString("senha"), rs.getString("sexo").charAt(0), rs.getInt("idade"));
+				usuarios.add(u);
+			}
+			st.close();
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
+		return usuarios;
+	}
+
+	public List<Usuario> getMenores18() {
+		List<Usuario> usuarios = new ArrayList<Usuario>();
+
+		try {
+			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+			String sql = "SELECT * FROM usuario WHERE usuario.idade < 18";
+			System.out.println(sql);
+			ResultSet rs = st.executeQuery(sql);
+			while(rs.next()) {
+				Usuario u = new Usuario(rs.getInt("codigo"), rs.getString("login"), rs.getString("senha"), rs.getString("sexo").charAt(0), rs.getInt("idade"));
+				usuarios.add(u);
+			}
+			st.close();
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
+		return usuarios;
+	}
 	
 	public boolean update(Usuario usuario) {
 		boolean status = false;
 		try {  
 			Statement st = conexao.createStatement();
 			String sql = "UPDATE usuario SET login = '" + usuario.getLogin() + "', senha = '"  
-				       + usuario.getSenha() + "', sexo = '" + usuario.getSexo() + "'"
+				       + usuario.getSenha() + "', sexo = '" + usuario.getSexo() + "', idade = " + usuario.getIdade()
 					   + " WHERE codigo = " + usuario.getCodigo();
 			System.out.println(sql);
 			st.executeUpdate(sql);

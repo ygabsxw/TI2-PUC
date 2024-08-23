@@ -5,19 +5,22 @@ public class Usuario {
 	private String login;
 	private String senha;
 	private char sexo;
+	private int idade;
 	
 	public Usuario() {
 		this.codigo = -1;
 		this.login = "";
 		this.senha = "";
 		this.sexo = '*';
+		this.idade = 0;
 	}
 	
-	public Usuario(int codigo, String login, String senha, char sexo) {
+	public Usuario(int codigo, String login, String senha, char sexo, int idade) {
 		this.codigo = codigo;
 		this.login = login;
 		this.senha = senha;
 		this.sexo = sexo;
+		this.idade = idade;
 	}
 
 	public int getCodigo() {
@@ -52,8 +55,16 @@ public class Usuario {
 		this.sexo = sexo;
 	}
 
+	public int getIdade() {
+		return idade;
+	}
+
+	public void setIdade(int idade) {
+		this.idade = idade;
+	}
+
 	@Override
 	public String toString() {
-		return "Usuario [codigo=" + codigo + ", login=" + login + ", senha=" + senha + ", sexo=" + sexo + "]";
+		return "Usuario [codigo=" + codigo + ", login=" + login + ", senha=" + senha + ", sexo=" + sexo + ", idade=" + idade + "]";
 	}	
 }

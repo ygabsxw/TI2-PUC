@@ -11,9 +11,9 @@ public class Aplicacao {
 	public static void main(String[] args) throws Exception {
 		
 		UsuarioDAO usuarioDAO = new UsuarioDAO();
-	
+		
 		System.out.println("\n\n==== Inserir usuário === ");
-		Usuario usuario = new Usuario(11, "pablo", "pablo",'M');
+		Usuario usuario = new Usuario(11, "pablo", "pablo",'M', 25);
 		if(usuarioDAO.insert(usuario) == true) {
 			System.out.println("Inserção com sucesso -> " + usuario.toString());
 		}
@@ -23,6 +23,24 @@ public class Aplicacao {
 			
 		System.out.println("\n\n==== Mostrar usuários do sexo masculino === ");
 		List<Usuario> usuarios = usuarioDAO.getSexoMasculino();
+		for (Usuario u: usuarios) {
+			System.out.println(u.toString());
+		}
+
+		System.out.println("\n\n==== Mostrar usuários do sexo feminino === ");
+		usuarios = usuarioDAO.getSexoFeminino();
+		for (Usuario u: usuarios) {
+			System.out.println(u.toString());
+		}
+
+		System.out.println("\n\n==== Mostrar usuários ordenados por serem maiores de idade === ");
+		usuarios = usuarioDAO.getOrderByIdade();
+		for (Usuario u: usuarios) {
+			System.out.println(u.toString());
+		}
+
+		System.out.println("\n\n==== Mostrar usuários ordenados por serem menores de idade === ");
+		usuarios = usuarioDAO.getOrderByIdade();
 		for (Usuario u: usuarios) {
 			System.out.println(u.toString());
 		}
