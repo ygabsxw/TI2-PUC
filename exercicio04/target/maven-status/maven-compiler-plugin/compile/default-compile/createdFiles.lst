@@ -1,0 +1,6 @@
+dao/DAO.class
+app/Aplicacao.class
+model/Usuario.class
+service/UserService.class
+azure/AzureSentimentAnalysis.class
+dao/UsuarioDAO.class
